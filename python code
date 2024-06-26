@@ -1,0 +1,67 @@
+
+import pandas as pd
+
+# Load the dataset
+file_path = 'Online Retail.xlsx'  # Ensure this path is correct on your local environment
+df = pd.read_excel('D:/DATA/JUPYTERNOTE/my project/Online Retail.xlsx')
+
+# Display the first few rows of the dataset
+print(df.head())
+
+# Display general information about the dataset
+print(df.info())
+
+# Check for missing values
+missing_values = df.isnull().sum()
+print(missing_values)
+
+# Basic statistics
+print(df.describe())
+!pip install seaborn matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Plot the distribution of quantities
+plt.figure(figsize=(10, 6))
+sns.histplot(df['Quantity'], bins=50)
+plt.title('Distribution of Quantity')
+plt.show()
+
+# Plot sales over time
+df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'])
+df.set_index('InvoiceDate', inplace=True)
+df['TotalPrice'] = df['Quantity'] * df['UnitPrice']
+df.resample('M')['TotalPrice'].sum().plot()
+plt.title('Sales Over Time')
+plt.show()
+
+# Top-selling products
+top_products = df.groupby('Description')['Quantity'].sum().sort_values(ascending=False).head(10)
+print(top_products)
+
+# Top-selling countries
+top_countries = df.groupby('Country')['Quantity'].sum().sort_values(ascending=False).head(10)
+print(top_countries)
+
+# Identify outliers in quantity
+sns.boxplot(x=df['Quantity'])
+plt.title('Boxplot of Quantity')
+plt.show()
+
+# Identify outliers in total price
+sns.boxplot(x=df['TotalPrice'])
+plt.title('Boxplot of Total Price')
+plt.show()
+# Summarize findings
+print("Summary of findings:")
+print()
+print("Sales Trends:\tBusiest Months: Between october ending and early November experience the heighest of peak sales months, which might be around holiday seasons or special events. Sales Patterns:")
+print()
+print('The top_selling Product is WORLD WAR 2 GLIDERS ASSTD DESIGNS   having a total sales of 53847 followed by JUMBO BAG RED RETROSPOT having 47363...')
+print()
+print('United Kingdom having 4263829 as the heighest sales country followed by Netherlands having 200128, and EIRE having 142637')
+# Summarize findings
+print()
+print("1. Basic statistics and visualizations reveal sales trends and customer behavior.")
+print("2. The busiest months and top-selling products have been identified.")
+print("3. Anomalies and outliers have been highlighted for further investigation.")
